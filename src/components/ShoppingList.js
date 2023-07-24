@@ -1,6 +1,8 @@
 import {PlantItem} from "./PlantItem";
 import {plantList} from "../datas/plantList";
 import '../styles/ShoppingList.css'
+import {useState} from "react";
+import {Categories} from "./Categories";
 /*const simplePlantListLocal = [
     'monstera',
     'ficus lyrata',
@@ -9,28 +11,52 @@ import '../styles/ShoppingList.css'
     'palmier'
 ]*/
 
-// const onePlantCategoryList = (categorie) => plantList.filter(plant => plant.category === categorie)
+function ShoppingList ({cart, updateCart}) {
+    const [selectedCategory, changeCategory] = useState('');
 
-function ShoppingList () {
-    const categories = plantList.reduce(
-        (acc, plant) =>
-            acc.includes(plant.category) ? acc : acc.concat(plant.category),
-        []
-    );
+    /*    const categories = plantList.reduce(
+            (acc, plant) =>
+                acc.includes(plant.category) ? acc : acc.concat(plant.category),
+            []
+        );*/
+
+    const onePlantCategoryList = () => plantList.filter(
+        plant => !selectedCategory? true : plant.category === selectedCategory
+    )
+
+    function updatePanier( name, price) {
+
+        const plantToAdd = cart.find((plant) => {
+            return plant.name === name
+        });
+
+        if (plantToAdd) {
+            const cartFiltered = cart.filter(plant => plant.name !== name);
+            updateCart([
+                ...cartFiltered, {name, price: plantToAdd.price, number: plantToAdd.number +1}
+            ])
+        } else {
+            updateCart([...cart, {name, price, number: 1}])
+        }
+    }
+
     return (
         <div className='lmj-shopping-list'>
-            <ul>
+           {/*<ul>
                 {categories.map((cat) => (
                     <li key={cat}>{cat}</li>
                 ))}
-            </ul>
+            </ul>*/}
+            <Categories selectedCategory={selectedCategory} changeCategory={changeCategory}/>
             <ul className='lmj-plant-list'>
                 {
-                    plantList.map((plant, index) =>
-                            <PlantItem
-                                key={`${plant.name} - ${plant.id} - ${index}`}
-                                plant={plant}
-                            />
+                    onePlantCategoryList().map((plant, index) =>
+                        <div key={`${plant.name} - ${plant.id} - ${index}`}>
+                            <PlantItem plant={plant}/>
+                            <button onClick={() => updatePanier(plant.name, plant.price)}>Ajouter</button>
+                        </div>
+
+
                         /*<li key={`${plant.name} - ${plant.id} - ${index}`} className='lmj-plant-item'>
                             {plant.name}
                             {plant.isSpecialOffer && <div className='lmj-sales'>Soldes</div>}

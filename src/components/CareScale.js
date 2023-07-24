@@ -6,10 +6,11 @@ function handleClick (displayed_text) {
 }
 
 function CareScale({ scaleValue, careType }) {
-    const range = [1, 2, 3];
-    const myText = ['peu', 'modérement', 'beaucoup'];
+    const range = [1, 2, 3, 4];
+    const myText = ['peu', 'modérement', 'pas mal', 'beaucoup trop'];
 
-    const displaysThis = 'Cette plante requiert ' + myText[scaleValue -1] +( careType === 'light' ? ' de lumière' : ' d\'arrosage');
+    const freq = scaleValue >= myText.length ? myText.slice(-1)[0] : myText[scaleValue -1]
+    const displaysThis = 'Cette plante requiert ' + freq +( careType === 'light' ? ' de lumière' : ' d\'arrosage');
 
     // const scaleType = careType === 'light' ? '☀️' : '💧';
     const scaleType = <img src={careType === 'light' ?  Sun: Water} alt={'LOGO-' + (careType === 'light' ?  'Sun': 'Water')}/>;
