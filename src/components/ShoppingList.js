@@ -23,6 +23,23 @@ function ShoppingList ({cart, updateCart}) {
     const onePlantCategoryList = () => plantList.filter(
         plant => !selectedCategory? true : plant.category === selectedCategory
     )
+	function existInCart (plantToCheck) {
+        return cart.some(plant => plant.name === plantToCheck.name);
+    }
+
+    function removeFromCart(plantCible) {
+        const cible = cart.find(plant => plant.name === plantCible.name);
+        const cartFiltered = cart.filter(plant => plant.name !== cible.name);
+        if (cible.number > 1) {
+            updateCart([
+                ...cartFiltered, {name: cible.name, price: cible.price, number: cible.number - 1}
+            ])
+        } else {
+            updateCart([
+                ...cartFiltered
+            ])
+        }
+    }
 
     function updatePanier( name, price) {
 
@@ -53,7 +70,11 @@ function ShoppingList ({cart, updateCart}) {
                     onePlantCategoryList().map((plant, index) =>
                         <div key={`${plant.name} - ${plant.id} - ${index}`}>
                             <PlantItem plant={plant}/>
-                            <button onClick={() => updatePanier(plant.name, plant.price)}>Ajouter</button>
+
+                            <div className="lmj-align-buttons">
+                                <button onClick={() => updatePanier(plant.name, plant.price)}>Ajouter</button>
+                                {existInCart(plant) && <button onClick={() => removeFromCart(plant)}>Retirer</button>}
+                            </div>
                         </div>
 
 
