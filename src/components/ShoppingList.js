@@ -71,7 +71,7 @@ function ShoppingList ({cart, updateCart}) {
                         <div key={`${plant.name} - ${plant.id} - ${index}`}>
                             <PlantItem plant={plant}/>
 
-                            <div className="lmj-align-buttons">
+                            <div className={existInCart(plant)? "lmj-align-buttons" : "no-style"}>
                                 <button onClick={() => updatePanier(plant.name, plant.price)}>Ajouter</button>
                                 {existInCart(plant) && <button onClick={() => removeFromCart(plant)}>Retirer</button>}
                             </div>
