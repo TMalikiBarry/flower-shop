@@ -8,12 +8,12 @@ import logo from "../assets/logo.png";
 import {useEffect, useState} from "react";
 
 function App() {
-    const savedCart = JSON.parse(localStorage.getItem('cart')) ?? [];
+    const savedCart = JSON.parse(sessionStorage.getItem('cart')) ?? [];
     console.log("SAVEDCART ", savedCart);
     const title = "la maison jungle", [cart, updateCart] = useState(savedCart);
-    // Utilisation de useEffect pour enregistrer dans localStorage après mise à jour de l'état cart
+    // Utilisation de useEffect pour enregistrer dans sessionStorage après mise à jour de l'état cart
     useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cart));
+        sessionStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
     return (
         <>
